@@ -1,0 +1,42 @@
+name: app
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: appdb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - jiebadict:/jieba_dict
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "18888:5432"
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=appdb;Username=myuser;Password=mypassword"
+      Gemini__ApiKey: "${GEMINI_API_KEY}"
+      Jieba__DictPath: "/jieba_dict/user_dict.txt"
+    volumes:
+      - jiebadict:/jieba_dict
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  jiebadict:

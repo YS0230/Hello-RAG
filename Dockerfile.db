@@ -1,0 +1,29 @@
+FROM pgvector/pgvector:pg17
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    postgresql-server-dev-17 \
+    git \
+    cmake \
+    build-essential \
+    libboost-dev \
+    ca-certificates \
+ && git clone --recurse-submodules https://github.com/jaiminpan/pg_jieba /tmp/pg_jieba \
+ && cd /tmp/pg_jieba \
+ && PG_SERVER_INC=$(/usr/lib/postgresql/17/bin/pg_config --includedir-server) \
+ && cmake \
+    -DPostgreSQL_TYPE_INCLUDE_DIR="$PG_SERVER_INC" \
+    -DPostgreSQL_INCLUDE_DIR="$PG_SERVER_INC" \
+    . \
+ && make \
+ && make install \
+ && rm -rf /tmp/pg_jieba \
+ && apt-get purge -y postgresql-server-dev-17 git cmake build-essential libboost-dev \
+ && apt-get autoremove -y \
+ && rm -rf /var/lib/apt/lists/* \
+ && rm -f /usr/share/postgresql/17/tsearch_data/jieba_user.dict \
+ && ln -s /jieba_dict/user_dict.txt /usr/share/postgresql/17/tsearch_data/jieba_user.dict
+
+COPY entrypoint-db.sh /entrypoint-db.sh
+RUN chmod +x /entrypoint-db.sh
+ENTRYPOINT ["/entrypoint-db.sh"]
+CMD ["postgres"]

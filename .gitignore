@@ -1,0 +1,27 @@
+# .NET
+Backend/bin/
+Backend/obj/
+*.user
+*.suo
+.vs/
+
+# EF Core
+*.db-shm
+*.db-wal
+
+# Node
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.vite/
+
+# Env
+.env
+.env*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp

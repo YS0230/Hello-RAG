@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  /* Botanical palette */
+  --color-accent: #2D3A31;
+  --color-accent-muted: rgba(45, 58, 49, 0.1);
+  --color-sage: #8C9A84;
+  --color-terracotta: #C27B66;
+  --color-clay: #DCCFC2;
+
+  /* Background */
+  --color-background: #F9F8F4;
+  --color-background-soft: #F2F0EB;
+  --color-background-mute: #E8E4DC;
+
+  /* Border */
+  --color-border: #E6E2DA;
+  --color-border-hover: #CCC8BF;
+
+  /* Text */
+  --color-heading: #2D3A31;
+  --color-text: #2D3A31;
+  --color-text-muted: rgba(45, 58, 49, 0.55);
+
+  /* Font */
+  --font-sans: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    font-weight: normal;
+  }
+
+  body {
+    min-height: 100vh;
+    color: var(--color-text);
+    background: var(--color-background);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
